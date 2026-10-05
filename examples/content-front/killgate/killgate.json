@@ -1,0 +1,30 @@
+{
+  "_doc": "Hard token killgate ON THE FRONT — content-front (лекция→клип, Q18). Contours: transcribe (lecture recording -> transcript), clip_cut (transcript -> clip plan + renders), upload (publish clips to the student cabinet). Ceiling derivation: median weekly burn x 1.2.",
+  "schema_version": 1,
+  "front": "content-front",
+  "monthly_subscription_cap_tokens": 800000,
+  "ceiling_derivation": "median weekly burn x 1.2, rounded up (fleet grill 03-10 ruling 6)",
+  "contours": [
+    {
+      "name": "transcribe",
+      "ceiling_tokens": 300000,
+      "median_weekly_burn_tokens": 250000
+    },
+    {
+      "name": "clip_cut",
+      "ceiling_tokens": 240000,
+      "median_weekly_burn_tokens": 200000
+    },
+    {
+      "name": "upload",
+      "ceiling_tokens": 60000,
+      "median_weekly_burn_tokens": 50000
+    }
+  ],
+  "overflow": {
+    "action": "auto_stop",
+    "trace": "killgate/TRACE_<unix-ts>.json",
+    "stop_marker": "killgate/STOP",
+    "resume": "human-only: delete STOP, record why beside the trace"
+  }
+}

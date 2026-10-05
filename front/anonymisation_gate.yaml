@@ -1,0 +1,26 @@
+# Anonymisation gate — MANDATORY file of every front (H5562, R3-Q8)
+# ON  on fronts that touch personal data (152-FZ): profiles below, no gate pass = no ingest.
+# OFF must carry the exact line: ПДн нет, gate OFF
+schema_version: 1
+front: <front-name>
+gate: ON                         # ON | OFF
+
+# --- ON profile (fronts with ПДн) ---
+pii_classes:                     # what counts as personal data here (H5562 classes)
+  - full names
+  - phones
+  - emails
+  - payment identifiers
+  - addresses
+redaction:
+  method: <masker or OSS gate per H5848 verdict>
+  rule: replace with class placeholder before any corpus ingest or model call
+hard_rule: no gate pass = no ingest              # courses + FAQ only until then
+sample_check:
+  cadence: weekly
+  hand_labelled_n: 0
+  pass_threshold: 1.0            # fraction of PII hits caught by the gate
+
+# --- OFF profile: uncomment the two lines below and DELETE the ON block above ---
+# gate: OFF
+# reason: ПДн нет, gate OFF

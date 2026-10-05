@@ -1,0 +1,20 @@
+{
+  "_doc": "Hard token killgate ON THE FRONT (grill-3 §13 + R3-Q7). Own ceiling per contour; sum of ceilings <= monthly_subscription_cap; overflow = auto-stop of the front with a trace file. Fill every <...> slot. Validated by dry_check.py.",
+  "schema_version": 1,
+  "front": "<front-name>",
+  "monthly_subscription_cap_tokens": 0,
+  "ceiling_derivation": "median weekly burn x 1.2, rounded up (fleet grill 03-10 ruling 6)",
+  "contours": [
+    {
+      "name": "<contour-1>",
+      "ceiling_tokens": 0,
+      "median_weekly_burn_tokens": 0
+    }
+  ],
+  "overflow": {
+    "action": "auto_stop",
+    "trace": "killgate/TRACE_<unix-ts>.json",
+    "stop_marker": "killgate/STOP",
+    "resume": "human-only: delete STOP, record why beside the trace"
+  }
+}

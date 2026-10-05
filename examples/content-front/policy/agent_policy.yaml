@@ -1,0 +1,48 @@
+# Agent policy — content-front (лекция→клип, grill-3 Q18) — pilot copy of front/
+schema_version: 1
+front: content-front
+profile: business
+
+tools:
+  default: deny
+  allow:
+    - read
+    - glob
+    - grep
+    - write
+    - bash
+    - task
+  commands:
+    default: deny
+    allow:
+      - git status
+      - git diff
+      - git log
+      - python3 -m pytest
+      - python3 dry_check.py
+      - python3 killgate/killgate.py
+owns_paths:
+  - examples/content-front
+
+ceilings:
+  max_steps_per_task: 40
+  max_tokens_per_task: 200000
+
+verify_gate:
+  required_before:
+    - git push
+    - pr merge
+    - message send
+    - deploy
+    - publish
+    - ingest
+  checks:
+    - dry_check.py green on the front dir
+    - killgate not in STOP state
+    - anonymisation_gate verdict recorded when the payload may carry ПДн
+    - diff reviewed: only owns_paths touched
+  on_fail: block
+
+source_rulings:
+  - "grill-3 ai-maturity 02-10-2026 §19"
+  - "H5636 (front layer)"

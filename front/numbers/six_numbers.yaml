@@ -1,0 +1,42 @@
+# The six weekly numbers of the front (grill-3 §20)
+# Read once a week in the SLO review (fleet grill 03-10 ruling 4: 6-numbers reading
+# merged INTO the SLO review). Fill every slot; keep the six — a front reports six.
+schema_version: 1
+front: <front-name>
+week: "YYYY-Www"                 # ISO week these numbers describe
+
+numbers:
+  land_rate:
+    definition: share of attempted units landed (merged/closed) this week
+    unit: percent
+    source: <ledger or handoffs registry grep>
+    value: 0.0
+  sl_attainment:
+    definition: share of the front's SLIs meeting target this week
+    unit: percent
+    source: <sli_daily.tsv row for this front>
+    value: 0.0
+  token_spend:
+    definition: tokens burned by the front this week (killgate ledger)
+    unit: tokens
+    source: killgate/usage.jsonl
+    value: 0
+  killgate_trips:
+    definition: auto-stops fired by the killgate this week
+    unit: count
+    source: killgate/TRACE_*.json count
+    value: 0
+  gate_verdicts:
+    definition: anonymisation-gate pass/fail verdicts this week (pass/fail)
+    unit: verdicts
+    source: <gate log path>
+    value: "0/0"
+  queue_freshness:
+    definition: median age of the front's open units
+    unit: days
+    source: <queue registry>
+    value: 0.0
+
+adoption_threshold:              # R3-Q4 — a front is adopted only after
+  requires: "1 week SLI wired into goals + gold PASS"
+  status: pilot                  # pilot | adopted

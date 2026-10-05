@@ -1,0 +1,40 @@
+# The six weekly numbers — content-front (лекция→клип), pilot week
+schema_version: 1
+front: content-front
+week: "2026-W41"
+
+numbers:
+  land_rate:
+    definition: share of attempted lecture->clip units landed (published to cabinet) this week
+    unit: percent
+    source: content-front unit ledger (lectures in vs clips published)
+    value: 0.0
+  sl_attainment:
+    definition: share of the front's SLIs meeting target this week (clip latency, gap alerts)
+    unit: percent
+    source: sli_daily.tsv content-front rows
+    value: 0.0
+  token_spend:
+    definition: tokens burned by the front this week (killgate ledger)
+    unit: tokens
+    source: killgate/usage.jsonl
+    value: 0
+  killgate_trips:
+    definition: auto-stops fired by the killgate this week
+    unit: count
+    source: killgate/TRACE_*.json count
+    value: 0
+  gate_verdicts:
+    definition: anonymisation-gate pass/fail verdicts this week (pass/fail)
+    unit: verdicts
+    source: gate log (transcripts carry student voices/names)
+    value: "0/0"
+  queue_freshness:
+    definition: median age of lectures still un-clipped
+    unit: days
+    source: content queue registry
+    value: 0.0
+
+adoption_threshold:
+  requires: "1 week SLI wired into goals + gold PASS"
+  status: pilot

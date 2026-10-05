@@ -1,0 +1,17 @@
+# Profile: business (R3-Q9 — exactly three profiles, one template for everything)
+# Extends the front policy for revenue/student-facing contours.
+schema_version: 1
+profile: business
+extends: policy/agent_policy.yaml
+
+tools_extra:
+  allow: []                      # e.g. care:post lane tools when the front is a care front
+verify_gate_extra:
+  required_before:
+    - money contour change       # payment/pricing/refund diffs ride the money-PR lane
+  checks:
+    - feature flag default OFF for money contours
+ceilings_multiplier: 1.0         # multiply the policy ceilings for this profile
+notes: >
+  Student correspondence, transcripts, payment records and credentials are NEVER
+  model-opened regardless of this profile (152-FZ; standing ruling 12-09-2026).
