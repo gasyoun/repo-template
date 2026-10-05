@@ -1,0 +1,26 @@
+# Profile: science (R3-Q9) — EXTENDS the science conveyor, never replaces it.
+schema_version: 1
+profile: science
+extends: policy/agent_policy.yaml
+
+# THE conveyor invariant (H5636 Fail clause): referee/submission-pack pipeline
+# stays unbroken. This profile may only ADD gates AROUND conveyor steps.
+conveyor_preserved: true
+conveyor:
+  - paper-referee                # hostile pre-submission review (Axx)
+  - paper-submission-pack        # byline/CITATION/cover-letter assembly (Axx)
+  - articles-update              # ARTICLES.md readiness bump
+rule: profile gates wrap the conveyor steps above; no step removed, renamed or reordered
+
+tools_extra:
+  allow: []                      # corpus probes stay read-only by default
+verify_gate_extra:
+  required_before:
+    - journal submission         # the submit action itself is verify-gated
+  checks:
+    - readiness >= 4 in ARTICLES.md
+    - camera-ready metadata LOCKed (ORCID, DOI) when the venue accepted
+ceilings_multiplier: 1.2         # long referee passes get one notch more room
+notes: >
+  Drafts (incl. prices/payment paths only for announcement-class texts per ruling
+  12-09-2026) may be reviewed by external models; student/personal data never.

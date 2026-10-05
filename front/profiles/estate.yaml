@@ -1,0 +1,19 @@
+# Profile: estate (R3-Q9) — cross-repo plumbing, registries, handoff machinery.
+schema_version: 1
+profile: estate
+extends: policy/agent_policy.yaml
+
+tools_extra:
+  allow:
+    - worktree claim             # lane isolation before any repo edit
+verify_gate_extra:
+  required_before:
+    - registry flip              # handoffs README row / GTD card-store writes
+    - hub regeneration           # gen_repo_context / hub_stubs / interlinks
+  checks:
+    - write gate green (gtd_active_state --check on GTD card-store)
+    - worktree off origin default, never the shared main tree
+ceilings_multiplier: 0.8         # plumbing units are short; keep burn tight
+notes: >
+  Estate profile fronts never carry corpus ПДн; if one ever does, the
+  anonymisation_gate flips ON with its own profile (R3-Q8 overrides profile).

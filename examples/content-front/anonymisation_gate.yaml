@@ -1,0 +1,20 @@
+# Anonymisation gate — content-front: ON (lecture transcripts carry ПДн: student
+# names in chat, voices, occasionally phones/emails in support asides).
+schema_version: 1
+front: content-front
+gate: ON
+
+pii_classes:
+  - full names
+  - phones
+  - emails
+  - payment identifiers
+  - addresses
+redaction:
+  method: masker per H5848 OSS-prior-art verdict (Presidio-class, RU ФИО/телефоны/адреса/платежи)
+  rule: replace with class placeholder before any corpus ingest or model call
+hard_rule: no gate pass = no ingest
+sample_check:
+  cadence: weekly
+  hand_labelled_n: 0
+  pass_threshold: 1.0

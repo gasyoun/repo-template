@@ -1,0 +1,53 @@
+# Agent policy of the front — policy-as-code (grill-3 §19)
+# Copy this file into the front and fill every <...> slot. dry_check.py validates it.
+schema_version: 1
+front: <front-name>              # e.g. content-front (лекция→клип, Q18)
+profile: business                # one of: business | science | estate (R3-Q9)
+
+# --- §19: tool allowlist, default-deny ---
+tools:
+  default: deny                  # anything not listed below is denied
+  allow:
+    - read                       # read files inside the front's own root
+    - glob
+    - grep
+    - write                      # writes ONLY inside owns_paths (below)
+    - bash                       # allowlisted commands only (commands.allow)
+    - task                       # subagents inherit this same policy
+  commands:
+    default: deny
+    allow:
+      - git status
+      - git diff
+      - git log
+      - python3 -m pytest
+      - python3 dry_check.py
+      - python3 killgate/killgate.py
+owns_paths:
+  - <front-root>                 # writes outside these are denied
+
+# --- §19: ceilings (steps/tokens per task) ---
+ceilings:
+  max_steps_per_task: 40         # hard stop of the task loop
+  max_tokens_per_task: 200000    # hard stop of one task's context burn
+
+# --- §19: verify-gate before EVERY external action ---
+verify_gate:
+  required_before:               # none of these may run without the gate
+    - git push
+    - pr merge
+    - message send               # telegram/vk/email
+    - deploy
+    - publish
+    - ingest                     # any corpus ingest (see anonymisation_gate)
+  checks:                        # all must pass, in order, before the action
+    - dry_check.py green on the front dir
+    - killgate not in STOP state
+    - anonymisation_gate verdict recorded when the payload may carry ПДн
+    - diff reviewed: only owns_paths touched
+  on_fail: block                 # block | confirm(human) — never silent-continue
+
+# --- provenance ---
+source_rulings:
+  - "grill-3 ai-maturity 02-10-2026 §19"
+  - "H5636 (front layer)"
