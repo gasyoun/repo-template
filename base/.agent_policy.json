@@ -1,0 +1,79 @@
+{
+  "schema_version": "1",
+  "_comment": "Starter pack v1 (repo-template base layer, H5770 per H5733 §7 Q3/Q5). Rules evaluate in order, first match wins: block (call prevented), confirm (harness prompts the human), audit (logged, call proceeds). A rule's literal override marker carried by a SHELL command bypasses THAT rule only. Edit this pack for THIS repo's real fences (secret paths, money contours, private-data dirs) — every rule needs an id + a reason a human can read. _-prefixed keys are comments; the installer does not overwrite this file once it differs from the template.",
+  "rules": [
+    {
+      "id": "env-file-write-deny",
+      "match": {
+        "paths": [
+          ".env",
+          ".env.*"
+        ],
+        "tools": [
+          "Bash",
+          "PowerShell",
+          "Write",
+          "Edit"
+        ]
+      },
+      "action": "block",
+      "reason": "Env files carry live secrets; agents never read-modify-write them. Change env files by hand (or a human-run one-liner) and keep real values out of chat and out of git. Escape [env-edit-ok] only for a human-sanctioned rotate-and-commit.",
+      "overrides": [
+        "[env-edit-ok]"
+      ]
+    },
+    {
+      "id": "secret-files-deny",
+      "match": {
+        "paths": [
+          "**/secrets/**",
+          "id_rsa*",
+          "*.pem"
+        ],
+        "tools": [
+          "Bash",
+          "PowerShell",
+          "Write",
+          "Edit",
+          "Read",
+          "Grep",
+          "Glob"
+        ]
+      },
+      "action": "block",
+      "reason": "Starter fence on obvious secret material (key files, certificates, secrets dirs). Tighten per repo: add the repo's own private-data dirs, credential stores and 152-FZ/GDPR fences with named ids and readable reasons.",
+      "overrides": []
+    },
+    {
+      "id": "force-push-audit",
+      "match": {
+        "command_regex": [
+          "git\\s+push\\b[^\\n]*--force"
+        ],
+        "tools": [
+          "Bash",
+          "PowerShell"
+        ]
+      },
+      "action": "audit",
+      "reason": "History rewrite is worth a ledger line before it lands; this starter records it without blocking. Flip to \"block\" per repo where shared branches must never be rewritten. Escape [force-push-ok] to skip the ledger entry.",
+      "overrides": [
+        "[force-push-ok]"
+      ]
+    },
+    {
+      "id": "package-publish-audit",
+      "match": {
+        "command_regex": [
+          "\\b(?:npm\\s+publish|twine\\s+upload|cargo\\s+publish)\\b"
+        ],
+        "tools": [
+          "Bash",
+          "PowerShell"
+        ]
+      },
+      "action": "audit",
+      "reason": "Publishing to a public registry is externally visible and hard to undo; the starter logs every publish call. Add version/registry fences per repo where publishes must be gated on a human."
+    }
+  ]
+}
