@@ -1,6 +1,6 @@
 # repo-template — one template for everything (policy-as-code, two layers)
 
-_Created: 06-10-2026 · Last updated: 06-10-2026_
+_Created: 06-10-2026 · Last updated: 08-10-2026_
 
 The ONE standalone repo-template (MG ruling 03-10-2026: **one repo, two layers** —
 [H5733 §7 rulings](https://github.com/gasyoun/claude-config/blob/main/docs/POLICY_AS_CODE_REPO_TEMPLATE_SPEC_03-10-2026.md),
@@ -12,8 +12,24 @@ wiring stay global, per-front data and domain prose live in the copy.
 
 | Layer | Owner | Contents | Status |
 |---|---|---|---|
-| **base/** | H5770 (policy-as-code pack per H5733 §7) | AGENTS.md skeleton, `.agent_policy.json` starter pack v1, test fixtures + guard tests, installer pointer in claude-config | reserved — shape + contract documented, content lands per H5770 |
+| **base/** | H5770 (policy-as-code pack per H5733 §7) | [AGENTS.md skeleton](base/AGENTS.md), [`.agent_policy.json` starter pack v1](base/.agent_policy.json), [standalone guard tests](base/tests/), installer `claude-config scripts/install_repo_template.py` | **implemented** (08-10-2026) — [base/README.md](base/README.md) |
 | **front/** | H5636 (this pass) | agent policy (§19), token killgate on the front (§13/R3-Q7), weekly 6 numbers (§20), anonymisation-gate H5562 (R3-Q8), profiles business/science/estate (R3-Q9) | implemented |
+
+## Base layer — adopting a repo (policy-as-code)
+
+1. Run the installer from a claude-config clone:
+   `python3 scripts/install_repo_template.py /path/to/repo` — scaffolds
+   `.agent_policy.json` + appends the [AGENTS.md skeleton](base/AGENTS.md)
+   (managed block, your prose preserved), prints the one-time `settings.json`
+   PreToolUse wiring snippet. Second run is byte-idempotent; the template
+   version is stamped into scaffolded files.
+2. Edit the pack: replace the starter fences with the repo's real ones (secret
+   paths, money contours, private-data dirs) — every rule needs an `id` + a
+   `reason` a human can read.
+3. Probe: one blocked + one allowed call per rule id
+   (`python ~/.claude/hooks/agent_policy.py --check .agent_policy.json --eval-tool …`).
+4. Commit `.agent_policy.json` + `AGENTS.md` in the repo; estate wiring needs
+   nothing per-repo. The installer NEVER touches `front/`.
 
 ## Front layer — the four mandatory files
 
@@ -48,6 +64,9 @@ everything, against fragmentation. The science profile EXTENDS the science conve
 - `python3 dry_check.py <front-dir>` — validates a front copy (exit 0/1).
 - `python3 -m pytest tests/ -q` — killgate negative test (overflow → auto-stop with
   trace) + dry-check self-tests.
+- `python3 -m unittest discover -s base/tests -v` — base layer standalone guard
+  tests (no claude-config clone needed): pack validates, secret paths blocked,
+  clean calls pass, malformed pack fails CLOSED.
 
 ## Sources and rulings
 

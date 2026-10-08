@@ -1,6 +1,11 @@
 # front/ — the front layer (H5636)
 
-_Created: 06-10-2026 · Last updated: 06-10-2026_
+_Created: 06-10-2026 · Last updated: 08-10-2026_
+
+> **Pointer note (H5770):** the front layer builds and lives HERE, in
+> `gasyoun/repo-template` — never a second template repo; the base layer
+> ([`base/`](../base/README.md), policy pack) landed 08-10-2026 and the installer
+> never touches `front/`.
 
 A **front** is one work contour of the estate (content, business, science, …). This
 layer is the portable AI-practice unit (grill-3 ai-maturity 02-10, R3-Q2): one template
