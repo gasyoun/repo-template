@@ -30,6 +30,9 @@ private-data dirs): every rule needs an `id` + a `reason` a human can read.
   is never a valid byline).
 - Closer contract: end work on the concrete outcome; human-decision items get
   options + facts + one recommendation, never a named decision-maker.
+- Verification ladder: run the repo's focused check while iterating and its
+  canonical full check before done. If checkers disagree, reproduce with the
+  repo's authoritative checker and report the discrepancy.
 - Code and wiring are GLOBAL (the estate); data and domain prose are PER-REPO.
   Per-repo `rules/` trees are banned — everything inline here (H5733 §7 Q7b).
 
